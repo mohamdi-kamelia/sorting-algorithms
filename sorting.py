@@ -1,46 +1,42 @@
-def merge_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    
-    # Divise la liste en deux moitiés
-    mid = len(arr) // 2
-    left_half = arr[:mid]
-    right_half = arr[mid:]
-    
-    # Récursivement trie les deux moitiés
-    left_half = merge_sort(left_half)
-    right_half = merge_sort(right_half)
-    
-    # Fusionne les moitiés triées
-    return merge(left_half, right_half)
+"""from random import randrange
+SIZE =  20
 
-def merge(left, right):
-    result = []
-    left_idx, right_idx = 0, 0
+def InsertionSort(lst):
+    for step in range(1, len(lst)):
+        key = lst[step]
+        i = step-1
+        while (i >=0) and (key < lst[i]):
+                lst[i+1] = lst[i]
+                i = i - 1
+        lst[i+1] = key
     
-    # Fusionne les deux listes triées
-    while left_idx < len(left) and right_idx < len(right):
-        if left[left_idx] < right[right_idx]:
-            result.append(left[left_idx])
-            left_idx += 1
-        else:
-            result.append(right[right_idx])
-            right_idx += 1
-    
-    # Ajoute les éléments restants
-    result.extend(left[left_idx:])
-    result.extend(right[right_idx:])
-    
-    return result
-
-# Fonction pour afficher le résultat du tri fusion
-def print_merge_sort_result(arr):
-    print("Liste originale :", arr)
-    sorted_arr = merge_sort(arr)
-    print("Liste triée :", sorted_arr)
-
-# Exemple d'utilisation
-if __name__ == "__main__":
-    # Vous pouvez remplacer cette liste par n'importe quelle liste de nombres réels
-    liste_a_trier = [12, 5, 6, 10, 3, 7, 8, 1, 15, 9]
-    print_merge_sort_result(liste_a_trier)
+# Create a random array    
+l = []
+for i in range(SIZE):
+    l.append(randrange(100))
+# Display it
+print("Unsorted array :")
+for i in range(len(l)):
+    print (l[i], end=', ')
+# Sort 
+InsertionSort(l)
+# Display result
+print()
+print ("Sorted array :")
+for i in range(len(l)):
+    print (l[i],end=', ')
+print()"""
+def tri_selection(tableau):
+    pass
+def tri_bulles(tableau):
+    pass
+def tri_fusion(tableau):
+    pass
+def tri_par_tas(tableau):
+    pass
+def tri_a_peigne(tableau):
+    pass
+def tri_insertion(tableau):
+    pass
+def tri_rapide(tableau):
+    pass
