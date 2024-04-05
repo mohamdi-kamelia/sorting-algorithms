@@ -107,12 +107,5 @@ def calculer_temps_execution(tri, liste):
     debut = time.time()
     tri(liste)
     fin = time.time()
+    print(f"Temps d'exécution pour {tri.__name__}: {fin - debut} secondes")
     return fin - debut
-
-
-number_list = []
-for i in range(1,1001):
-    number_list.append(i)
-random.shuffle(number_list)
-
-print("Tri rapide", calculer_temps_execution(tri_rapide,number_list.copy()))
