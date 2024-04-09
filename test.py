@@ -1,85 +1,59 @@
 import tkinter as tk
-from colorsys import hsv_to_rgb
-from math import sin, radians  # Importation de sin et radians depuis la bibliothèque math
+from tkinter import ttk
 import random
+import math
+import colorsys
 
-# Fonction pour générer toutes les couleurs possibles avec des teintes variées
-def generate_colors(num_colors):
-    colors = []
-    for hue in range(0, 360, int(360/num_colors)):
-        rgb = hsv_to_rgb(hue / 360, 1.0, 1.0)
-        hex_color = "#{:02x}{:02x}{:02x}".format(int(rgb[0] * 255), int(rgb[1] * 255), int(rgb[2] * 255))
-        colors.extend([hex_color] * 10)  # Répéter chaque couleur 10 fois
-    return colors
+class ColorSortApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Color Sorter")
+        
+        self.size = 180
+        self.colors = ['#' + ''.join(random.choices('0123456789ABCDEF', k=6)) for _ in range(self.size)]
+        
+        self.canvas = tk.Canvas(root, width=400, height=400, bg='white')
+        self.canvas.pack()
+        
+        self.sort_button = ttk.Button(root, text="Sort", command=self.sort)
+        self.sort_button.pack()
+        
+        self.shuffle_button = ttk.Button(root, text="Shuffle", command=self.shuffle)
+        self.shuffle_button.pack()
+        
+        self.draw_colors_in_circle()
+        
+    def sort(self):
+        self.sort_colors_by_hue()
+        self.draw_colors_in_circle()
+    
+    def shuffle(self):
+        random.shuffle(self.colors)
+        self.draw_colors_in_circle()
+    
+    def draw_colors_in_circle(self):
+        self.canvas.delete("all")
+        radius = 150
+        center_x = self.canvas.winfo_reqwidth() // 2
+        center_y = self.canvas.winfo_reqheight() // 2
+        
+        for i, color in enumerate(self.colors):
+            angle = i * (360 / self.size)
+            x1 = center_x + radius * math.cos(math.radians(angle))
+            y1 = center_y + radius * math.sin(math.radians(angle))
+            x2 = center_x + radius * math.cos(math.radians(angle + 360 / self.size))
+            y2 = center_y + radius * math.sin(math.radians(angle + 360 / self.size))
+            self.canvas.create_polygon(center_x, center_y, x1, y1, x2, y2, fill=color)
+    
+    def sort_colors_by_hue(self):
+        # Convert colors to HSV and sort by hue
+        hsv_colors = [colorsys.rgb_to_hsv(int(color[1:3], 16) / 255.0, int(color[3:5], 16) / 255.0, int(color[5:], 16) / 255.0) for color in self.colors]
+        self.colors = [color for _, color in sorted(zip([color[0] for color in hsv_colors], self.colors))]
+    
+def main():
+    root = tk.Tk()
+    app = ColorSortApp(root)
+    root.mainloop()
 
-# Fonction pour afficher le cercle initial avec les couleurs générées
-def display_initial_circle(colors):
-    angle = 0
-    angle_increment = 360 / len(colors)
-    for color in colors:
-        start_x = center_x + radius * sin(radians(angle))  # Utilisation de la fonction sin de math
-        start_y = center_y - radius * sin(radians(angle))
-        end_x = center_x + radius * sin(radians(angle + angle_increment))  # Utilisation de la fonction radians de math
-        end_y = center_y - radius * sin(radians(angle + angle_increment))
-        canvas.create_arc(center_x - radius, center_y - radius, center_x + radius, center_y + radius,
-                          start=angle, extent=angle_increment, fill=color, outline=color)
-        angle += angle_increment
-
-# Fonction pour réorganiser les couleurs en fonction d'un algorithme de tri spécifié
-def rearrange_colors(colors, algo_name):
-    # Effectue le tri des couleurs en fonction du nom de l'algorithme
-    if algo_name == "Tri à bulles":
-        tri_bulle(colors)
-    else:
-        print("Tri non reconnu. Les couleurs ne seront pas réorganisées.")
-
-# Fonction pour afficher le cercle réorganisé avec les couleurs triées
-def display_rearranged_circle(colors):
-    angle = 0
-    angle_increment = 360 / len(colors)
-    for color in colors:
-        start_x = center_x + radius * sin(radians(angle))  # Utilisation de la fonction sin de math
-        start_y = center_y - radius * sin(radians(angle))
-        end_x = center_x + radius * sin(radians(angle + angle_increment))  # Utilisation de la fonction radians de math
-        end_y = center_y - radius * sin(radians(angle + angle_increment))
-        canvas.create_arc(center_x - radius, center_y - radius, center_x + radius, center_y + radius,
-                          start=angle, extent=angle_increment, fill=color, outline=color)
-        angle += angle_increment
-
-# Fonction pour démarrer le tri et réorganiser les couleurs
-def start_sorting():
-    global colors
-    algo_name = algorithm_selection.get()
-    rearrange_colors(colors, algo_name)
-    display_rearranged_circle(colors)
-
-# Paramètres du cercle
-center_x = 250
-center_y = 250
-radius = 200
-
-# Création de la fenêtre principale
-root = tk.Tk()
-root.title("Tri de couleurs avec Tkinter")
-
-# Création du canevas
-canvas = tk.Canvas(root, width=500, height=500)
-canvas.pack()
-
-# Génération de couleurs avec des teintes variées
-colors = generate_colors(36)  # 36 couleurs différentes
-
-# Affichage du cercle initial avec les couleurs générées
-display_initial_circle(colors)
-
-# Choix de l'algorithme de tri
-algorithm_selection = tk.StringVar(root)
-algorithm_selection.set("Tri à bulles")
-algorithm_menu = tk.OptionMenu(root, algorithm_selection, "Tri à bulles")
-algorithm_menu.pack()
-
-# Bouton pour démarrer le tri
-start_button = tk.Button(root, text="Démarrer le tri", command=start_sorting)
-start_button.pack()
-
-root.mainloop()
+if __name__ == "__main__":
+    main()

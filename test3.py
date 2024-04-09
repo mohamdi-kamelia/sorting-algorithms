@@ -1,5 +1,6 @@
 import random
 import time
+import threading
 
 def tri_par_selection(liste):
     for i in range(len(liste)):
@@ -109,10 +110,29 @@ def calculer_temps_execution(tri, liste):
     fin = time.time()
     return fin - debut
 
+def tri_et_calcul_temps(tri_func, liste, temps_resultats):
+    debut = time.time()
+    tri_func(liste)
+    fin = time.time()
+    temps_resultats[tri_func.__name__] = fin - debut
 
 number_list = []
 for i in range(1,1001):
     number_list.append(i)
 random.shuffle(number_list)
 
-print("Tri par tas", calculer_temps_execution(tri_par_tas,number_list.copy()))
+threads = []
+temps_resultats = {}
+
+for tri_func in [tri_par_selection, tri_a_bulles, tri_insertion, tri_fusion, tri_rapide, tri_par_tas]:
+    liste_copie = number_list.copy()
+    thread = threading.Thread(target=tri_et_calcul_temps, args=(tri_func, liste_copie, temps_resultats))
+    threads.append(thread)
+    thread.start()
+
+for thread in threads:
+    thread.join()
+
+print("Temps d'exécution pour chaque algorithme:")
+for tri_func in temps_resultats:
+    print(f"{tri_func}: {temps_resultats[tri_func]} seconds")

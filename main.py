@@ -21,9 +21,11 @@ def main():
     choix = demander_tri()
 
     if choix == 1:
-        tri_selection(tableau)
+        pass
+        #tri_selection(tableau)
     elif choix == 2:
-        tri_bulles(tableau)
+        pass
+        #tri_bulles(tableau)
     elif choix == 3:
         tri_insertion(tableau)
     elif choix == 4:
@@ -33,7 +35,8 @@ def main():
     elif choix == 6:
         tri_par_tas(tableau)
     elif choix == 7:
-        tri_a_peigne(tableau)
+        pass
+        #tri_a_peigne(tableau)
     else:
         print("Choix invalide")
 
