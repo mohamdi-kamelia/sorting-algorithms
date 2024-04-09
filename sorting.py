@@ -114,11 +114,6 @@ def calculer_temps_execution(tri, liste):
     return fin - debut
 
 
-def generer_couleurs(liste):
-    hsv = [(x/len(liste), 1, 1) for x in liste]
-    rgb = [colorsys.hsv_to_rgb(*x) for x in hsv]
-    return rgb
-
 def liste_aleatoire(n):
         liste = []
         for i in range(1, n+1):
@@ -130,11 +125,19 @@ class TriGraphique:
     def __init__(self, liste):
         self.liste = liste
         self.fenetre = tk.Tk()
-        self.canvas = tk.Canvas(self.fenetre, width=800, height=800)
+        self.canvas = tk.Canvas(self.fenetre, width=800, height=700)
         self.canvas.pack()
 
-        self.couleurs = generer_couleurs(self.liste)
-        self.roue = self.creer_roue(self.canvas, self.couleurs)    
+        self.couleurs = self.generer_couleurs(self.liste)
+        self.roue = self.creer_roue(self.canvas, self.couleurs)
+        
+        self.create_buttons()
+
+
+    def generer_couleurs(self,liste):
+        hsv = [(x/len(liste), 1, 1) for x in liste]
+        rgb = [colorsys.hsv_to_rgb(*x) for x in hsv]
+        return rgb
 
     def creer_roue(self, canvas, liste):
         x = 400
@@ -152,7 +155,7 @@ class TriGraphique:
 
     def update(self, liste):
         self.canvas.delete("all")
-        self.couleurs = generer_couleurs(liste)
+        self.couleurs = self.generer_couleurs(liste)
         self.roue = self.creer_roue(self.canvas, self.couleurs)
         self.fenetre.update()
 
@@ -188,48 +191,136 @@ class TriGraphique:
             self.fenetre.update()
         return self.liste
     
-    def tri_fusion(self, liste):
-        if len(liste) > 1:
-            mid = len(liste) // 2
-            left = liste[:mid]
-            right = liste[mid:]
+    def tri_fusion(self, liste, start_index=0, end_index=None):
+        if end_index is None:
+            end_index = len(liste)
 
-            self.tri_fusion(left)
-            self.tri_fusion(right)
+        if end_index - start_index > 1:
+            mid = (start_index + end_index) // 2
+
+            self.tri_fusion(liste, start_index, mid)
+            self.tri_fusion(liste, mid, end_index)
+
+            # Merge the sublists
+            left = liste[start_index:mid]
+            right = liste[mid:end_index]
 
             i = j = k = 0
 
             while i < len(left) and j < len(right):
                 if left[i] < right[j]:
-                    liste[k] = left[i]
+                    liste[start_index + k] = left[i]
                     i += 1
                 else:
-                    liste[k] = right[j]
+                    liste[start_index + k] = right[j]
                     j += 1
                 k += 1
 
+            # Fill in remaining elements from left sublist
             while i < len(left):
-                liste[k] = left[i]
+                liste[start_index + k] = left[i]
                 i += 1
                 k += 1
 
+            # Fill in remaining elements from right sublist
             while j < len(right):
-                liste[k] = right[j]
+                liste[start_index + k] = right[j]
                 j += 1
                 k += 1
 
-            self.update(liste)
-            self.fenetre.update()
+        # Update the visualization of the entire list after each merge operation
+        self.update(liste)
+        self.fenetre.update()
 
         return liste
+    
+    def tri_rapide(self, liste, start_index=0, end_index=None):
+        if end_index is None:
+            end_index = len(liste) - 1
+
+        if start_index < end_index:
+            pivot = liste[end_index]
+            pivot_index = start_index - 1
+
+            for i in range(start_index, end_index):
+                if liste[i] <= pivot:
+                    pivot_index += 1
+                    liste[pivot_index], liste[i] = liste[i], liste[pivot_index]
+                    self.update(liste)
+                    self.fenetre.update()
+
+            pivot_index += 1
+            liste[pivot_index], liste[end_index] = liste[end_index], liste[pivot_index]
+
+            # Recursively sort the elements before and after the pivot
+            self.tri_rapide(liste, start_index, pivot_index - 1)
+            self.tri_rapide(liste, pivot_index + 1, end_index)
+
+        return liste
+    
+    def tri_par_tas(self):
+        def tamiser(liste, n, i):
+            plus_grand = i
+            gauche = 2 * i + 1
+            droite = 2 * i + 2
+
+            if gauche < n and liste[i] < liste[gauche]:
+                plus_grand = gauche
+
+            if droite < n and liste[plus_grand] < liste[droite]:
+                plus_grand = droite
+
+            if plus_grand != i:
+                liste[i], liste[plus_grand] = liste[plus_grand], liste[i]
+                tamiser(liste, n, plus_grand)
+
+        n = len(self.liste)
+
+        for i in range(n, -1, -1):
+            tamiser(self.liste, n, i)
+            self.update(self.liste)
+            self.fenetre.update()
+
+        for i in range(n-1, 0, -1):
+            self.liste[i], self.liste[0] = self.liste[0], self.liste[i]
+            tamiser(self.liste, i, 0)
+            self.update(self.liste)
+            self.fenetre.update()
+
+        return self.liste
+    
+    def create_buttons(self):
+        selection_button = tk.Button(self.fenetre, text="Tri par sélection", command=self.tri_par_selection)
+        selection_button.pack()
+
+        bubble_button = tk.Button(self.fenetre, text="Tri à bulles", command=self.tri_a_bulles)
+        bubble_button.pack()
+
+        insertion_button = tk.Button(self.fenetre, text="Tri par insertion", command=self.tri_insertion)
+        insertion_button.pack()
+
+        merge_button = tk.Button(self.fenetre, text="Tri fusion", command=lambda: self.tri_fusion(self.liste))
+        merge_button.pack()
+
+        quick_button = tk.Button(self.fenetre, text="Tri rapide", command=lambda: self.tri_rapide(self.liste))
+        quick_button.pack()
+
+        heap_button = tk.Button(self.fenetre, text="Tri par tas", command=self.tri_par_tas)
+        heap_button.pack()
+
+        shuffle_button = tk.Button(self.fenetre, width=20,height=5,bg="red", text="Mélanger", command=self.shuffle)
+        shuffle_button.place(x=340, y=80)
+
+    def shuffle(self):
+        random.shuffle(self.liste)
+        self.update(self.liste)
+        self.fenetre.update()
 
 
     def run(self):
-        self.tri_fusion(self.liste)
-        self.update(self.liste)
         self.fenetre.mainloop()
 
 
-liste = liste_aleatoire(1000)
+liste = liste_aleatoire(180)
 roue = TriGraphique(liste)
 roue.run()
