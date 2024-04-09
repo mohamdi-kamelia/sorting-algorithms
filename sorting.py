@@ -1,5 +1,8 @@
 import random
 import time
+import colorsys
+import tkinter as tk
+from math import sin, radians, cos, pi
 
 def tri_par_selection(liste):
     for i in range(len(liste)):
@@ -109,3 +112,124 @@ def calculer_temps_execution(tri, liste):
     fin = time.time()
     print(f"Temps d'exécution pour {tri.__name__}: {fin - debut} secondes")
     return fin - debut
+
+
+def generer_couleurs(liste):
+    hsv = [(x/len(liste), 1, 1) for x in liste]
+    rgb = [colorsys.hsv_to_rgb(*x) for x in hsv]
+    return rgb
+
+def liste_aleatoire(n):
+        liste = []
+        for i in range(1, n+1):
+            liste.append(i)
+        random.shuffle(liste)
+        return liste
+
+class TriGraphique:
+    def __init__(self, liste):
+        self.liste = liste
+        self.fenetre = tk.Tk()
+        self.canvas = tk.Canvas(self.fenetre, width=800, height=800)
+        self.canvas.pack()
+
+        self.couleurs = generer_couleurs(self.liste)
+        self.roue = self.creer_roue(self.canvas, self.couleurs)    
+
+    def creer_roue(self, canvas, liste):
+        x = 400
+        y = 400
+        r = 200
+        for i in range(len(liste)):
+            angle = radians(i/len(liste) * 360)
+            x1 = x + r * cos(angle)
+            y1 = y + r * sin(angle)
+            x2 = x + r * cos(angle + 2 * pi / len(liste))
+            y2 = y + r * sin(angle + 2 * pi / len(liste))
+            canvas.create_polygon(x, y, x1, y1, x2, y2, fill=f"#{int(liste[i][0]*255):02x}{int(liste[i][1]*255):02x}{int(liste[i][2]*255):02x}")
+
+        return canvas
+
+    def update(self, liste):
+        self.canvas.delete("all")
+        self.couleurs = generer_couleurs(liste)
+        self.roue = self.creer_roue(self.canvas, self.couleurs)
+        self.fenetre.update()
+
+    def tri_par_selection(self):
+        for i in range(len(self.liste)):
+            min_index = i
+            for j in range(i+1, len(self.liste)):
+                if self.liste[j] < self.liste[min_index]:
+                    min_index = j
+            self.liste[i], self.liste[min_index] = self.liste[min_index], self.liste[i]
+            self.update(self.liste)
+            self.fenetre.update()
+        return self.liste
+    
+    def tri_a_bulles(self):
+        for i in range(len(self.liste)):
+            for j in range(0, len(self.liste)-i-1):
+                if self.liste[j] > self.liste[j+1]:
+                    self.liste[j], self.liste[j+1] = self.liste[j+1], self.liste[j]
+                    self.update(self.liste)
+                    self.fenetre.update()
+        return self.liste
+    
+    def tri_insertion(self):
+        for i in range(1, len(self.liste)):
+            key = self.liste[i]
+            j = i-1
+            while j >= 0 and key < self.liste[j]:
+                self.liste[j+1] = self.liste[j]
+                j -= 1
+            self.liste[j+1] = key
+            self.update(self.liste)
+            self.fenetre.update()
+        return self.liste
+    
+    def tri_fusion(self, liste):
+        if len(liste) > 1:
+            mid = len(liste) // 2
+            left = liste[:mid]
+            right = liste[mid:]
+
+            self.tri_fusion(left)
+            self.tri_fusion(right)
+
+            i = j = k = 0
+
+            while i < len(left) and j < len(right):
+                if left[i] < right[j]:
+                    liste[k] = left[i]
+                    i += 1
+                else:
+                    liste[k] = right[j]
+                    j += 1
+                k += 1
+
+            while i < len(left):
+                liste[k] = left[i]
+                i += 1
+                k += 1
+
+            while j < len(right):
+                liste[k] = right[j]
+                j += 1
+                k += 1
+
+            self.update(liste)
+            self.fenetre.update()
+
+        return liste
+
+
+    def run(self):
+        self.tri_fusion(self.liste)
+        self.update(self.liste)
+        self.fenetre.mainloop()
+
+
+liste = liste_aleatoire(1000)
+roue = TriGraphique(liste)
+roue.run()
