@@ -2,26 +2,26 @@ from sorting import *
 import threading
 import random
 
-number_list = []
-for i in range(1,1001):
-    number_list.append(i)
-random.shuffle(number_list)
+liste_nombres = []
+for i in range(1, 1001):
+    liste_nombres.append(i)
+random.shuffle(liste_nombres)
 
 threads = [
-    threading.Thread(target=calculer_temps_execution, args=(tri_par_selection, number_list.copy())),
-    threading.Thread(target=calculer_temps_execution, args=(tri_a_bulles, number_list.copy())),
-    threading.Thread(target=calculer_temps_execution, args=(tri_insertion, number_list.copy())),
-    threading.Thread(target=calculer_temps_execution, args=(tri_fusion, number_list.copy())),
-    threading.Thread(target=calculer_temps_execution, args=(tri_par_tas, number_list.copy())),
-    threading.Thread(target=calculer_temps_execution, args=(tri_rapide, number_list.copy())),
-    threading.Thread(target=calculer_temps_execution, args=(tri_peigne, number_list.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_par_selection, liste_nombres.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_a_bulles, liste_nombres.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_insertion, liste_nombres.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_fusion, liste_nombres.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_par_tas, liste_nombres.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_rapide, liste_nombres.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_peigne, liste_nombres.copy())),
 ]
 
-# Start all threads
+# Démarrer tous les threads
 for thread in threads:
     thread.start()
 
-# Join all threads
+# Attendre la fin de tous les threads
 for thread in threads:
     thread.join()
 
