@@ -106,6 +106,21 @@ def tri_par_tas(liste):
 
     return liste
 
+<<<<<<< HEAD
+=======
+def tri_peigne(liste):
+    def trier_peigne(liste):
+        interval = len(liste)
+        while interval > 1:
+            interval = max(1, int(interval / 1.25))
+            for i in range(len(liste) - interval):
+                if liste[i] > liste[i + interval]:
+                    liste[i], liste[i + interval] = liste[i + interval], liste[i]
+        return liste
+
+    return trier_peigne(liste)
+
+>>>>>>> jean
 def calculer_temps_execution(tri, liste):
     debut = time.time()
     tri(liste)
@@ -125,7 +140,11 @@ class TriGraphique:
     def __init__(self, liste):
         self.liste = liste
         self.fenetre = tk.Tk()
+<<<<<<< HEAD
         self.canvas = tk.Canvas(self.fenetre, width=700, height=600)
+=======
+        self.canvas = tk.Canvas(self.fenetre, width=800, height=700)
+>>>>>>> jean
         self.canvas.pack()
 
         self.couleurs = self.generer_couleurs(self.liste)
@@ -289,6 +308,24 @@ class TriGraphique:
 
         return self.liste
     
+<<<<<<< HEAD
+=======
+    def tri_peigne(self):
+        def trier_peigne(liste):
+            interval = len(liste)
+            while interval > 1:
+                interval = max(1, int(interval / 1.25))
+                for i in range(len(liste) - interval):
+                    if liste[i] > liste[i + interval]:
+                        liste[i], liste[i + interval] = liste[i + interval], liste[i]
+                        self.update(liste)
+                        self.fenetre.update()
+            return liste
+
+        return trier_peigne(self.liste)
+    
+    
+>>>>>>> jean
     def create_buttons(self):
         selection_button = tk.Button(self.fenetre, text="Tri par sélection", command=self.tri_par_selection)
         selection_button.pack()
@@ -308,6 +345,12 @@ class TriGraphique:
         heap_button = tk.Button(self.fenetre, text="Tri par tas", command=self.tri_par_tas)
         heap_button.pack()
 
+<<<<<<< HEAD
+=======
+        comb_button = tk.Button(self.fenetre, text="Tri peigne", command=self.tri_peigne)
+        comb_button.pack()
+
+>>>>>>> jean
         shuffle_button = tk.Button(self.fenetre, width=20,height=5,bg="red", text="Mélanger", command=self.shuffle)
         shuffle_button.place(x=340, y=80)
 
@@ -321,6 +364,9 @@ class TriGraphique:
         self.fenetre.mainloop()
 
 
+<<<<<<< HEAD
 liste = liste_aleatoire(180)
 roue = TriGraphique(liste)
 roue.run()
+=======
+>>>>>>> jean

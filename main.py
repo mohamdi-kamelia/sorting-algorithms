@@ -1,46 +1,31 @@
 from sorting import *
+import threading
+import random
 
-def afficher_tableau(tableau):
-    print("Tableau trié :", tableau)
+number_list = []
+for i in range(1,1001):
+    number_list.append(i)
+random.shuffle(number_list)
 
-def demander_tri():
-    print("Choisissez un algorithme de tri :")
-    print("1. Tri par sélection")
-    print("2. Tri à bulles")
-    print("3. Tri par insertion")
-    print("4. Tri fusion")
-    print("5. Tri rapide")
-    print("6. Tri par tas")
-    print("7. Tri à peigne")
-    choix = int(input("Entrez votre choix : "))
+threads = [
+    threading.Thread(target=calculer_temps_execution, args=(tri_par_selection, number_list.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_a_bulles, number_list.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_insertion, number_list.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_fusion, number_list.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_par_tas, number_list.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_rapide, number_list.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_peigne, number_list.copy())),
+]
 
-    return choix
+# Start all threads
+for thread in threads:
+    thread.start()
 
-def main():
-    tableau = [int(x) for x in input("Entrez les éléments du tableau séparés par des espaces : ").split()]
-    choix = demander_tri()
+# Join all threads
+for thread in threads:
+    thread.join()
 
-    if choix == 1:
-        pass
-        #tri_selection(tableau)
-    elif choix == 2:
-        pass
-        #tri_bulles(tableau)
-    elif choix == 3:
-        tri_insertion(tableau)
-    elif choix == 4:
-        tri_fusion(tableau)
-    elif choix == 5:
-        tableau = tri_rapide(tableau)
-    elif choix == 6:
-        tri_par_tas(tableau)
-    elif choix == 7:
-        pass
-        #tri_a_peigne(tableau)
-    else:
-        print("Choix invalide")
 
-    afficher_tableau(tableau)
-
-if __name__ == "__main__":
-    main()
+liste = liste_aleatoire(180)
+roue = TriGraphique(liste)
+roue.run()
