@@ -322,10 +322,10 @@ class TriGraphique:
         bouton_insertion = tk.Button(self.fenetre, text="Tri par insertion", command=self.cliquer_insertion)
         bouton_insertion.place(x=10, y=80)
 
-        bouton_fusion = tk.Button(self.fenetre, text="Tri fusion", command=lambda: self.cliquer_fusion(self.liste.copy()))
+        bouton_fusion = tk.Button(self.fenetre, text="Tri fusion", command=lambda: self.cliquer_fusion(self.liste))
         bouton_fusion.place(x=10, y=120)
 
-        bouton_rapide = tk.Button(self.fenetre, text="Tri rapide", command=lambda: self.cliquer_rapide(self.liste.copy()))
+        bouton_rapide = tk.Button(self.fenetre, text="Tri rapide", command=lambda: self.cliquer_rapide(self.liste))
         bouton_rapide.place(x=10, y=160)
 
         bouton_tas = tk.Button(self.fenetre, text="Tri par tas", command=self.cliquer_tas)
