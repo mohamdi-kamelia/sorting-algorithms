@@ -313,29 +313,57 @@ class TriGraphique:
     
     
     def creer_boutons(self):
-        selection_button = tk.Button(self.fenetre, text="Tri par sélection", command=self.tri_par_selection)
-        selection_button.place(x=10, y=0)
+        bouton_selection = tk.Button(self.fenetre, text="Tri par sélection", command=self.cliquer_selection)
+        bouton_selection.place(x=10, y=0)
 
-        bouton_bulles = tk.Button(self.fenetre, text="Tri à bulles", command=self.tri_a_bulles)
+        bouton_bulles = tk.Button(self.fenetre, text="Tri à bulles", command=self.cliquer_bulles)
         bouton_bulles.place(x=10, y=40)
 
-        bouton_insertion = tk.Button(self.fenetre, text="Tri par insertion", command=self.tri_insertion)
+        bouton_insertion = tk.Button(self.fenetre, text="Tri par insertion", command=self.cliquer_insertion)
         bouton_insertion.place(x=10, y=80)
 
-        bouton_fusion = tk.Button(self.fenetre, text="Tri fusion", command=lambda: self.tri_fusion(self.liste))
+        bouton_fusion = tk.Button(self.fenetre, text="Tri fusion", command=lambda: self.cliquer_fusion(self.liste.copy()))
         bouton_fusion.place(x=10, y=120)
 
-        bouton_rapide = tk.Button(self.fenetre, text="Tri rapide", command=lambda: self.tri_rapide(self.liste))
+        bouton_rapide = tk.Button(self.fenetre, text="Tri rapide", command=lambda: self.cliquer_rapide(self.liste.copy()))
         bouton_rapide.place(x=10, y=160)
 
-        bouton_tas = tk.Button(self.fenetre, text="Tri par tas", command=self.tri_par_tas)
+        bouton_tas = tk.Button(self.fenetre, text="Tri par tas", command=self.cliquer_tas)
         bouton_tas.place(x=10, y=200)
 
-        bouton_peigne = tk.Button(self.fenetre, text="Tri peigne", command=self.tri_peigne)
+        bouton_peigne = tk.Button(self.fenetre, text="Tri peigne", command=self.cliquer_peigne)
         bouton_peigne.place(x=10, y=240)
 
         bouton_melanger = tk.Button(self.fenetre, width=20,height=5,bg="red", text="Mélanger", command=self.melanger)
         bouton_melanger.place(x=340, y=80)
+
+    def cliquer_selection(self):
+        self.melanger()
+        self.tri_par_selection()
+
+    def cliquer_bulles(self):
+        self.melanger()
+        self.tri_a_bulles()
+    
+    def cliquer_insertion(self):
+        self.melanger()
+        self.tri_insertion()
+    
+    def cliquer_fusion(self, liste):
+        self.melanger()
+        self.tri_fusion(liste)
+
+    def cliquer_rapide(self, liste):
+        self.melanger()
+        self.tri_rapide(liste)
+
+    def cliquer_tas(self):
+        self.melanger()
+        self.tri_par_tas()
+
+    def cliquer_peigne(self):
+        self.melanger()
+        self.tri_peigne()
 
     def melanger(self):
         random.shuffle(self.liste)
