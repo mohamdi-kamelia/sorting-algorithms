@@ -13,7 +13,8 @@ threads = [
     threading.Thread(target=calculer_temps_execution, args=(tri_insertion, number_list.copy())),
     threading.Thread(target=calculer_temps_execution, args=(tri_fusion, number_list.copy())),
     threading.Thread(target=calculer_temps_execution, args=(tri_par_tas, number_list.copy())),
-    threading.Thread(target=calculer_temps_execution, args=(tri_rapide, number_list.copy()))
+    threading.Thread(target=calculer_temps_execution, args=(tri_rapide, number_list.copy())),
+    threading.Thread(target=calculer_temps_execution, args=(tri_peigne, number_list.copy())),
 ]
 
 # Start all threads
@@ -23,3 +24,8 @@ for thread in threads:
 # Join all threads
 for thread in threads:
     thread.join()
+
+
+liste = liste_aleatoire(180)
+roue = TriGraphique(liste)
+roue.run()
