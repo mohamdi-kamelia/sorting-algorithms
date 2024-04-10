@@ -6,11 +6,11 @@ from math import sin, radians, cos, pi
 
 def tri_par_selection(liste):
     for i in range(len(liste)):
-        min_index = i
+        index_min = i
         for j in range(i+1, len(liste)):
-            if liste[j] < liste[min_index]:
-                min_index = j
-        liste[i], liste[min_index] = liste[min_index], liste[i]
+            if liste[j] < liste[index_min]:
+                index_min = j
+        liste[i], liste[index_min] = liste[index_min], liste[i]
     return liste
 
 def tri_a_bulles(liste):
@@ -22,41 +22,41 @@ def tri_a_bulles(liste):
 
 def tri_insertion(liste):
     for i in range(1, len(liste)):
-        key = liste[i]
+        clé = liste[i]
         j = i-1
-        while j >= 0 and key < liste[j]:
+        while j >= 0 and clé < liste[j]:
             liste[j+1] = liste[j]
             j -= 1
-        liste[j+1] = key
+        liste[j+1] = clé
     return liste
 
 def tri_fusion(liste):
     if len(liste) > 1:
-        mid = len(liste) // 2
-        left = liste[:mid]
-        right = liste[mid:]
+        milieu = len(liste) // 2
+        gauche = liste[:milieu]
+        droite = liste[milieu:]
 
-        tri_fusion(left)
-        tri_fusion(right)
+        tri_fusion(gauche)
+        tri_fusion(droite)
 
         i = j = k = 0
 
-        while i < len(left) and j < len(right):
-            if left[i] < right[j]:
-                liste[k] = left[i]
+        while i < len(gauche) and j < len(droite):
+            if gauche[i] < droite[j]:
+                liste[k] = gauche[i]
                 i += 1
             else:
-                liste[k] = right[j]
+                liste[k] = droite[j]
                 j += 1
             k += 1
 
-        while i < len(left):
-            liste[k] = left[i]
+        while i < len(gauche):
+            liste[k] = gauche[i]
             i += 1
             k += 1
 
-        while j < len(right):
-            liste[k] = right[j]
+        while j < len(droite):
+            liste[k] = droite[j]
             j += 1
             k += 1
 
@@ -108,12 +108,12 @@ def tri_par_tas(liste):
 
 def tri_peigne(liste):
     def trier_peigne(liste):
-        interval = len(liste)
-        while interval > 1:
-            interval = max(1, int(interval / 1.25))
-            for i in range(len(liste) - interval):
-                if liste[i] > liste[i + interval]:
-                    liste[i], liste[i + interval] = liste[i + interval], liste[i]
+        intervale = len(liste)
+        while intervale > 1:
+            intervale = max(1, int(intervale / 1.25))
+            for i in range(len(liste) - intervale):
+                if liste[i] > liste[i + intervale]:
+                    liste[i], liste[i + intervale] = liste[i + intervale], liste[i]
         return liste
 
     return trier_peigne(liste)
@@ -143,7 +143,7 @@ class TriGraphique:
         self.couleurs = self.generer_couleurs(self.liste)
         self.roue = self.creer_roue(self.canvas, self.couleurs)
         
-        self.create_buttons()
+        self.creer_boutons()
 
 
     def generer_couleurs(self,liste):
@@ -165,7 +165,7 @@ class TriGraphique:
 
         return canvas
 
-    def update(self, liste):
+    def mise_a_jour(self, liste):
         self.canvas.delete("all")
         self.couleurs = self.generer_couleurs(liste)
         self.roue = self.creer_roue(self.canvas, self.couleurs)
@@ -173,12 +173,12 @@ class TriGraphique:
 
     def tri_par_selection(self):
         for i in range(len(self.liste)):
-            min_index = i
+            index_min = i
             for j in range(i+1, len(self.liste)):
-                if self.liste[j] < self.liste[min_index]:
-                    min_index = j
-            self.liste[i], self.liste[min_index] = self.liste[min_index], self.liste[i]
-            self.update(self.liste)
+                if self.liste[j] < self.liste[index_min]:
+                    index_min = j
+            self.liste[i], self.liste[index_min] = self.liste[index_min], self.liste[i]
+            self.mise_a_jour(self.liste)
             self.fenetre.update()
         return self.liste
     
@@ -187,86 +187,82 @@ class TriGraphique:
             for j in range(0, len(self.liste)-i-1):
                 if self.liste[j] > self.liste[j+1]:
                     self.liste[j], self.liste[j+1] = self.liste[j+1], self.liste[j]
-                    self.update(self.liste)
+                    self.mise_a_jour(self.liste)
                     self.fenetre.update()
         return self.liste
     
     def tri_insertion(self):
         for i in range(1, len(self.liste)):
-            key = self.liste[i]
+            clé = self.liste[i]
             j = i-1
-            while j >= 0 and key < self.liste[j]:
+            while j >= 0 and clé < self.liste[j]:
                 self.liste[j+1] = self.liste[j]
                 j -= 1
-            self.liste[j+1] = key
-            self.update(self.liste)
+            self.liste[j+1] = clé
+            self.mise_a_jour(self.liste)
             self.fenetre.update()
         return self.liste
     
-    def tri_fusion(self, liste, start_index=0, end_index=None):
-        if end_index is None:
-            end_index = len(liste)
+    def tri_fusion(self, liste, index_debut=0, index_fin=None):
+        if index_fin is None:
+            index_fin = len(liste)
 
-        if end_index - start_index > 1:
-            mid = (start_index + end_index) // 2
+        if index_fin - index_debut > 1:
+            milieu = (index_debut + index_fin) // 2
 
-            self.tri_fusion(liste, start_index, mid)
-            self.tri_fusion(liste, mid, end_index)
+            self.tri_fusion(liste, index_debut, milieu)
+            self.tri_fusion(liste, milieu, index_fin)
 
-            # Merge the sublists
-            left = liste[start_index:mid]
-            right = liste[mid:end_index]
+
+            gauche = liste[index_debut:milieu]
+            droite = liste[milieu:index_fin]
 
             i = j = k = 0
 
-            while i < len(left) and j < len(right):
-                if left[i] < right[j]:
-                    liste[start_index + k] = left[i]
+            while i < len(gauche) and j < len(droite):
+                if gauche[i] < droite[j]:
+                    liste[index_debut + k] = gauche[i]
                     i += 1
                 else:
-                    liste[start_index + k] = right[j]
+                    liste[index_debut + k] = droite[j]
                     j += 1
                 k += 1
 
-            # Fill in remaining elements from left sublist
-            while i < len(left):
-                liste[start_index + k] = left[i]
+            while i < len(gauche):
+                liste[index_debut + k] = gauche[i]
                 i += 1
                 k += 1
 
-            # Fill in remaining elements from right sublist
-            while j < len(right):
-                liste[start_index + k] = right[j]
+            while j < len(droite):
+                liste[index_debut + k] = droite[j]
                 j += 1
                 k += 1
 
-        # Update the visualization of the entire list after each merge operation
-        self.update(liste)
+        self.mise_a_jour(liste)
         self.fenetre.update()
 
         return liste
     
-    def tri_rapide(self, liste, start_index=0, end_index=None):
-        if end_index is None:
-            end_index = len(liste) - 1
+    def tri_rapide(self, liste, index_debut=0, index_fin=None):
+        if index_fin is None:
+            index_fin = len(liste) - 1
 
-        if start_index < end_index:
-            pivot = liste[end_index]
-            pivot_index = start_index - 1
+        if index_debut < index_fin:
+            pivot = liste[index_fin]
+            pivot_index = index_debut - 1
 
-            for i in range(start_index, end_index):
+            for i in range(index_debut, index_fin):
                 if liste[i] <= pivot:
                     pivot_index += 1
                     liste[pivot_index], liste[i] = liste[i], liste[pivot_index]
-                    self.update(liste)
+                    self.mise_a_jour(liste)
                     self.fenetre.update()
 
             pivot_index += 1
-            liste[pivot_index], liste[end_index] = liste[end_index], liste[pivot_index]
+            liste[pivot_index], liste[index_fin] = liste[index_fin], liste[pivot_index]
 
-            # Recursively sort the elements before and after the pivot
-            self.tri_rapide(liste, start_index, pivot_index - 1)
-            self.tri_rapide(liste, pivot_index + 1, end_index)
+            self.tri_rapide(liste, index_debut, pivot_index - 1)
+            self.tri_rapide(liste, pivot_index + 1, index_fin)
 
         return liste
     
@@ -290,60 +286,60 @@ class TriGraphique:
 
         for i in range(n, -1, -1):
             tamiser(self.liste, n, i)
-            self.update(self.liste)
+            self.mise_a_jour(self.liste)
             self.fenetre.update()
 
         for i in range(n-1, 0, -1):
             self.liste[i], self.liste[0] = self.liste[0], self.liste[i]
             tamiser(self.liste, i, 0)
-            self.update(self.liste)
+            self.mise_a_jour(self.liste)
             self.fenetre.update()
 
         return self.liste
     
     def tri_peigne(self):
         def trier_peigne(liste):
-            interval = len(liste)
-            while interval > 1:
-                interval = max(1, int(interval / 1.25))
-                for i in range(len(liste) - interval):
-                    if liste[i] > liste[i + interval]:
-                        liste[i], liste[i + interval] = liste[i + interval], liste[i]
-                        self.update(liste)
+            intervale = len(liste)
+            while intervale > 1:
+                intervale = max(1, int(intervale / 1.25))
+                for i in range(len(liste) - intervale):
+                    if liste[i] > liste[i + intervale]:
+                        liste[i], liste[i + intervale] = liste[i + intervale], liste[i]
+                        self.mise_a_jour(liste)
                         self.fenetre.update()
             return liste
 
         return trier_peigne(self.liste)
     
     
-    def create_buttons(self):
+    def creer_boutons(self):
         selection_button = tk.Button(self.fenetre, text="Tri par sélection", command=self.tri_par_selection)
-        selection_button.pack()
+        selection_button.place(x=10, y=0)
 
-        bubble_button = tk.Button(self.fenetre, text="Tri à bulles", command=self.tri_a_bulles)
-        bubble_button.pack()
+        bouton_bulles = tk.Button(self.fenetre, text="Tri à bulles", command=self.tri_a_bulles)
+        bouton_bulles.place(x=10, y=40)
 
-        insertion_button = tk.Button(self.fenetre, text="Tri par insertion", command=self.tri_insertion)
-        insertion_button.pack()
+        bouton_insertion = tk.Button(self.fenetre, text="Tri par insertion", command=self.tri_insertion)
+        bouton_insertion.place(x=10, y=80)
 
-        merge_button = tk.Button(self.fenetre, text="Tri fusion", command=lambda: self.tri_fusion(self.liste))
-        merge_button.pack()
+        bouton_fusion = tk.Button(self.fenetre, text="Tri fusion", command=lambda: self.tri_fusion(self.liste))
+        bouton_fusion.place(x=10, y=120)
 
-        quick_button = tk.Button(self.fenetre, text="Tri rapide", command=lambda: self.tri_rapide(self.liste))
-        quick_button.pack()
+        bouton_rapide = tk.Button(self.fenetre, text="Tri rapide", command=lambda: self.tri_rapide(self.liste))
+        bouton_rapide.place(x=10, y=160)
 
-        heap_button = tk.Button(self.fenetre, text="Tri par tas", command=self.tri_par_tas)
-        heap_button.pack()
+        bouton_tas = tk.Button(self.fenetre, text="Tri par tas", command=self.tri_par_tas)
+        bouton_tas.place(x=10, y=200)
 
-        comb_button = tk.Button(self.fenetre, text="Tri peigne", command=self.tri_peigne)
-        comb_button.pack()
+        bouton_peigne = tk.Button(self.fenetre, text="Tri peigne", command=self.tri_peigne)
+        bouton_peigne.place(x=10, y=240)
 
-        shuffle_button = tk.Button(self.fenetre, width=20,height=5,bg="red", text="Mélanger", command=self.shuffle)
-        shuffle_button.place(x=340, y=80)
+        bouton_melanger = tk.Button(self.fenetre, width=20,height=5,bg="red", text="Mélanger", command=self.melanger)
+        bouton_melanger.place(x=340, y=80)
 
-    def shuffle(self):
+    def melanger(self):
         random.shuffle(self.liste)
-        self.update(self.liste)
+        self.mise_a_jour(self.liste)
         self.fenetre.update()
 
 
