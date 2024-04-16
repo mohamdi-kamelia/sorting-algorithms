@@ -150,6 +150,8 @@ class TriGraphique:
         self.label_echanges.place(x=560, y=80)
         self.label_comparaisons = tk.Label(self.fenetre, text="Comparaisons: 0")  # Label pour afficher le nombre de comparaisons
         self.label_comparaisons.place(x=560 , y= 40)
+        self.label_temps_execution = tk.Label(self.fenetre, text="Temps d'exécution: 0 secondes")  # Label pour afficher le temps d'exécution
+        self.label_temps_execution.place(x=250, y=40)
         
         self.creer_boutons()
 
@@ -253,11 +255,13 @@ class TriGraphique:
                 k += 1
 
             while i < len(gauche):
+                self.echanges +=1
                 liste[index_debut + k] = gauche[i]
                 i += 1
                 k += 1
 
             while j < len(droite):
+                self.echanges +=1
                 liste[index_debut + k] = droite[j]
                 j += 1
                 k += 1
@@ -340,7 +344,7 @@ class TriGraphique:
                         self.mise_a_jour(self.liste)
                         self.fenetre.update()
             return liste
-
+        
         return trier_peigne(self.liste)
     
     
@@ -373,47 +377,83 @@ class TriGraphique:
         self.comparaisons = 0
         self.echanges = 0
         self.melanger()
+        debut = time.time()
         self.tri_par_selection()
+        fin = time.time()
+        temps_execution = fin - debut
+        self.label_temps_execution.config(text="Temps d'exécution: {:.5f} secondes".format(temps_execution))
+
 
     def cliquer_bulles(self):
         self.comparaisons = 0
         self.echanges = 0
         self.melanger()
+        debut = time.time()
         self.tri_a_bulles()
+        fin = time.time()
+        temps_execution = fin - debut
+        self.label_temps_execution.config(text="Temps d'exécution: {:.5f} secondes".format(temps_execution))
+
     
     def cliquer_insertion(self):
         self.comparaisons = 0
         self.echanges = 0
         self.melanger()
+        debut = time.time()
         self.tri_insertion()
+        fin = time.time()
+        temps_execution = fin - debut
+        self.label_temps_execution.config(text="Temps d'exécution: {:.5f} secondes".format(temps_execution))
+
     
     def cliquer_fusion(self, liste):
         self.comparaisons = 0
         self.echanges = 0
         self.melanger()
+        debut = time.time()
         self.tri_fusion(liste)
+        fin = time.time()
+        temps_execution = fin - debut
+        self.label_temps_execution.config(text="Temps d'exécution: {:.5f} secondes".format(temps_execution))
+
 
     def cliquer_rapide(self, liste):
         self.comparaisons = 0
         self.echanges = 0
         self.melanger()
+        debut = time.time()
         self.tri_rapide(liste)
+        fin = time.time()
+        temps_execution = fin - debut
+        self.label_temps_execution.config(text="Temps d'exécution: {:.5f} secondes".format(temps_execution))
+
 
     def cliquer_tas(self):
         self.comparaisons = 0
         self.echanges = 0
         self.melanger()
+        debut = time.time()
         self.tri_par_tas()
+        fin = time.time()
+        temps_execution = fin - debut
+        self.label_temps_execution.config(text="Temps d'exécution: {:.5f} secondes".format(temps_execution))
+
 
     def cliquer_peigne(self):
         self.comparaisons = 0
         self.echanges = 0
         self.melanger()
+        debut = time.time()
         self.tri_peigne()
+        fin = time.time()
+        temps_execution = fin - debut
+        self.label_temps_execution.config(text="Temps d'exécution: {:.5f} secondes".format(temps_execution))
+
 
     def melanger(self):
         self.comparaisons = 0
         self.echanges = 0
+        self.label_temps_execution.config(text="Temps d'exécution: 0 secondes") 
         random.shuffle(self.liste)
         self.mise_a_jour(self.liste)
         self.fenetre.update()
