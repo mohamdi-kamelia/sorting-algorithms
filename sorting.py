@@ -4,6 +4,7 @@ import colorsys
 import tkinter as tk
 from math import sin, radians, cos, pi
 
+#fonction pour le Tri par sélection
 def tri_par_selection(liste):
     for i in range(len(liste)):
         index_min = i
@@ -13,6 +14,7 @@ def tri_par_selection(liste):
         liste[i], liste[index_min] = liste[index_min], liste[i]
     return liste
 
+#fonction pour le tri a bulles
 def tri_a_bulles(liste):
     for i in range(len(liste)):
         for j in range(0, len(liste)-i-1):
@@ -20,6 +22,7 @@ def tri_a_bulles(liste):
                 liste[j], liste[j+1] = liste[j+1], liste[j]
     return liste
 
+#Tri par insertion : parcourt la liste
 def tri_insertion(liste):
     for i in range(1, len(liste)):
         clé = liste[i]
@@ -30,6 +33,7 @@ def tri_insertion(liste):
         liste[j+1] = clé
     return liste
 
+#fonction pour le tri par fusion 
 def tri_fusion(liste):
     if len(liste) > 1:
         milieu = len(liste) // 2
@@ -62,6 +66,7 @@ def tri_fusion(liste):
 
     return liste
 
+#Fonction pour le tri rapide 
 def tri_rapide(liste):
     if len(liste) <= 1:
         return liste
@@ -79,6 +84,7 @@ def tri_rapide(liste):
 
     return tri_rapide(elements_plus_petits) + [pivot] + tri_rapide(elements_plus_grands)
 
+#fonction pour le tri par tas
 def tri_par_tas(liste):
     def tamiser(liste, n, i):
         plus_grand = i
@@ -105,7 +111,7 @@ def tri_par_tas(liste):
         tamiser(liste, i, 0)
 
     return liste
-
+#Fonction pour le tri peigne
 def tri_peigne(liste):
     def trier_peigne(liste):
         intervale = len(liste)
@@ -118,6 +124,7 @@ def tri_peigne(liste):
 
     return trier_peigne(liste)
 
+# Calcule et affiche le temps d'exécution d'un algorithme de tri sur une liste donnée.
 def calculer_temps_execution(tri, liste):
     debut = time.time()
     tri(liste)
@@ -125,7 +132,7 @@ def calculer_temps_execution(tri, liste):
     print(f"Temps d'exécution pour {tri.__name__}: {fin - debut} secondes")
     return fin - debut
 
-
+#Génère une liste aléatoire de taille n.
 def liste_aleatoire(n):
     liste = []
     for i in range(1, n+1):
@@ -177,7 +184,7 @@ class TriGraphique:
 
         return canvas
 
-
+#Met à jour l'affichage graphique de la liste sur le canvas.
     def mise_a_jour(self, liste):
         self.canvas.delete("all")
         self.couleurs = self.generer_couleurs(liste)
@@ -186,7 +193,7 @@ class TriGraphique:
         self.label_comparaisons.config(text="Comparaisons: {}".format(self.comparaisons))  # Met à jour le label de comparaisons
         self.fenetre.update()
 
-
+#Implémente les tris  et met à jour l'affichage graphique à chaque étape du tri.
     def tri_par_selection(self):
         for i in range(len(self.liste)):
             index_min = i
@@ -347,7 +354,7 @@ class TriGraphique:
         
         return trier_peigne(self.liste)
     
-    
+#Crée les boutons pour lancer les différents algorithmes de tri.    
     def creer_boutons(self):
         bouton_selection = tk.Button(self.fenetre, text="Tri par sélection", command=self.cliquer_selection)
         bouton_selection.place(x=10, y=0)
@@ -373,6 +380,7 @@ class TriGraphique:
         bouton_melanger = tk.Button(self.fenetre, width=20,height=5,bg="red", text="Mélanger", command=self.melanger)
         bouton_melanger.place(x=280, y=520)
 
+#Événements déclenchés lors du clic sur les boutons des Tris.
     def cliquer_selection(self):
         self.comparaisons = 0
         self.echanges = 0
@@ -449,7 +457,7 @@ class TriGraphique:
         temps_execution = fin - debut
         self.label_temps_execution.config(text="Temps d'exécution: {:.5f} secondes".format(temps_execution))
 
-
+# Mélange la liste et met à jour l'affichage graphique.
     def melanger(self):
         self.comparaisons = 0
         self.echanges = 0
@@ -458,7 +466,7 @@ class TriGraphique:
         self.mise_a_jour(self.liste)
         self.fenetre.update()
 
-
+# Lance l'interface graphique.
     def run(self):
         self.fenetre.mainloop()
 

@@ -29,6 +29,11 @@ Ce projet vise à créer une interface graphique interactive pour illustrer le f
 - **Idée simple**: Transformez la liste en une structure de données appelée tas, puis extrayez séquentiellement les éléments du tas pour les placer dans la liste triée.
 - **Analogie**: Comme organiser un groupe de personnes par taille, en plaçant la plus grande personne à la fin de la file et en déplaçant les personnes plus petites vers l'avant jusqu'à ce que tout le monde soit en ordre.
 
+### 7. Tri par peigne
+- **Idée simple**: Commencer par comparer des éléments plus lointains, puis de raccourcir progressivement l'intervalle entre les éléments pour aboutir finalement à un tri à bulle classique.(c'est un algorithme de tri par comparaison qui améliore de façon notable les performances du tri à bulle.)
+
+-**Analogie**:Pensez à peigner les cheveux d'une poupée. Vous commencez par démêler les mèches les plus éloignées les unes des autres, en les tirant doucement pour réduire les enchevêtrements. Ensuite, vous rapprochez progressivement le peigne, travaillant de la base vers le haut, pour lisser les mèches avec plus de précision. À la fin, vous avez des cheveux parfaitement démêlés, organisés de manière ordonnée. De même, dans le tri peigne, vous commencez par des écarts plus larges entre les éléments à trier, puis réduisez progressivement ces écarts jusqu'à ce que l'ensemble soit correctement trié.
+
 ## Mesures de Performance
 Pour évaluer les performances de chaque algorithme, une liste de 1000 nombres est générée aléatoirement et mélangée. Chaque algorithme est ensuite exécuté sur une copie de cette liste dans un thread séparé pour mesurer le temps d'exécution de chaque algorithme.
 
